@@ -1,7 +1,12 @@
 module FreshJwt
   class ContractError < StandardError
+    DEFAULT_MESSAGE = 'something wrong with Contract'
+    def initialize(msg = DEFAULT_MESSAGE, exception_type='custom')
+      @exception_type = exception_type
+      super(msg) 
+    end
     def message
-      "something wrong with Contract"
+      super
     end
   end
 end
@@ -11,4 +16,3 @@ class IssuerContract < Dry::Validation::Contract
     required(:algorithm).filled(:string)
   end
 end
-

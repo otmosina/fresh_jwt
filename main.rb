@@ -9,6 +9,6 @@ rescue FreshJwt::ContractError => e
 end
 exit(0) unless token
 p token 
-p JWT.decode(token[1], issuer.secret, 'HS256')
+p JWT.decode(token, issuer.secret, 'HS256')
 
 payload = FreshJwt::Payload.new({})

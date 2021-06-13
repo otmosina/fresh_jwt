@@ -24,27 +24,25 @@ module FreshJwt
 
     option :user_id, proc(&:to_i), default: proc{ rand(1000) }
 
+    
     def call
-
-      # TODO: monadic handle contract
-      
-      result = IssuerContract.new.call(algorithm: algorithm)
-      if result.success?
-        puts "all good"
-      else
-        p result.errors.to_h
-        raise ContractError  
-      end
-      
-      payload_json = Payload.dry_initializer.attributes(payload).merge(user_id: user_id)
-      {
-        jti: payload.jti,
-        iat: payload.iat,
-        exp: payload.exp, 
-        user_id: payload.user_id        
-      }
+      validate_params params
+      payload_json = payload.params_to_hash.merge(user_id: user_id)
       token = JWT.encode(payload_json, secret, algorithm)
-      return [result, token]
+      return token
     end
+
+    def params
+      @params ||= self.class.dry_initializer.attributes(self)
+    end
+
+    def validate_params params
+      result = IssuerContract.new.call(params)
+      unless result.success?
+        raise ContractError.new(result.errors.to_h)  
+      end
+    end
+
+    
   end
 end
