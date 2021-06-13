@@ -15,21 +15,35 @@ require 'dry/monads'
 
 
 module FreshJwt    
+  
+  class Store
+    def save token
+
+    end
+    def get token
+
+    end
+  end
   class Issuer
     extend Dry::Initializer
 
-    option :payload, default: proc { Payload.new } #why we need new i do not understand, coz class is callable
-    option :algorithm, default: -> { 'HS256' } #RS256
-    option :secret, default: -> { SecureRandom.hex }
 
+    option :payload, default: proc { Payload.new } #why we need new i do not understand, coz class is callable
+    # TODO: describe enum type for 2 algo
+    option :algorithm, default: -> { 'HS256' } #RS256 
+    option :secret, default: -> { SecureRandom.hex }
     option :user_id, proc(&:to_i), default: proc{ rand(1000) }
 
     
     def call
       validate_params params
-      payload_json = payload.params_to_hash.merge(user_id: user_id)
+      payload_json = extend_payload(user_id: user_id)
       token = JWT.encode(payload_json, secret, algorithm)
       return token
+    end
+
+    def extend_payload prms
+      payload.params_to_hash.merge(prms)
     end
 
     def params
