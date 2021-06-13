@@ -30,19 +30,23 @@ module FreshJwt
 
     option :jti, default: proc { SecureRandom.hex }
     option :iat, proc(&:to_i), default: proc { Time.now }
-    option :exp, proc(&:to_i), default: -> { iat + 10*60} #default: ->(val) { iat + 10*60}
+    option :exp, proc(&:to_i), default: -> { iat + 10*60 } #default: ->(val) { iat + 10*60}
     option :user_id, proc(&:to_i), optional: true
   end
     
   class Issuer
     extend Dry::Initializer
 
-    option :payload, default: -> { Hash.new }
+    option :payload, default: proc { Payload.new } #why we need new i do not understand, coz class is callable
     option :algorithm, default: -> { 'HS256' } #RS256
     option :secret, default: -> { SecureRandom.hex }
 
+    option :user_id, proc(&:to_i), default: proc{ rand(1000) }
+
     def call
 
+      # TODO: monadic handle contract
+      
       result = IssuerContract.new.call(algorithm: algorithm)
       if result.success?
         puts "all good"
@@ -50,20 +54,15 @@ module FreshJwt
         p result.errors.to_h
         raise ContractError  
       end
-      # TODO: monadic handle contract
       
-      #(JWT ID) 
-      jti = SecureRandom.hex
-      iat = Time.now.to_i
-      exp = iat + Expiration::ACCESS 
-      user_id = rand(666)
-      payload = {
-        jti: jti,
-        iat: iat,
-        exp: exp, 
-        user_id: user_id        
+      payload_json = Payload.dry_initializer.attributes(payload).merge(user_id: user_id)
+      {
+        jti: payload.jti,
+        iat: payload.iat,
+        exp: payload.exp, 
+        user_id: payload.user_id        
       }
-      token = JWT.encode(payload, secret, algorithm)
+      token = JWT.encode(payload_json, secret, algorithm)
       return [result, token]
     end
   end
