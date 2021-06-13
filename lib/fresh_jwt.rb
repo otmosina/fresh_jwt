@@ -7,33 +7,14 @@ require 'securerandom'
 require_relative 'validator'
 require_relative 'fresh_jwt/expiration'
 require_relative 'contracts/issuer_contract'
+require_relative 'fresh_jwt/payload'
 
 
 require 'dry/monads'
 #TODO payload as dry entity
-module Entity
-  module Callable
-    def call(*args)
-      new(*args)
-    end
-
-    alias [] call
-  end
-end
 
 
-module FreshJwt
-
-  class Payload
-    extend Dry::Initializer
-    extend Entity::Callable
-
-    option :jti, default: proc { SecureRandom.hex }
-    option :iat, proc(&:to_i), default: proc { Time.now }
-    option :exp, proc(&:to_i), default: -> { iat + 10*60 } #default: ->(val) { iat + 10*60}
-    option :user_id, proc(&:to_i), optional: true
-  end
-    
+module FreshJwt    
   class Issuer
     extend Dry::Initializer
 
@@ -67,57 +48,3 @@ module FreshJwt
     end
   end
 end
-
-
-
-=begin
-
-module Jwt
-  module Issuer
-    module_function
-
-    def call(user)
-      access_token, jti, exp = Jwt::Encoder.call(user)
-      refresh_token = user.refresh_tokens.create!
-      Jwt::Whitelister.whitelist!(
-        jti: jti,
-        exp: exp,
-        user: user
-      )
-
-      [access_token, refresh_token]
-    end
-  end
-end
-
-
-module Jwt
-  module Encoder
-    module_function
-
-    def call(user)
-      jti = SecureRandom.hex
-      exp = Jwt::Encoder.token_expiry
-      access_token = JWT.encode(
-        {
-          user_id: user.id,
-          jti: jti,
-          iat: Jwt::Encoder.token_issued_at.to_i,
-          exp: exp
-        },
-        Jwt::Secret.secret
-      )
-
-      [access_token, jti, exp]
-    end
-
-    def token_expiry
-      (Jwt::Encoder.token_issued_at + Jwt::Expiry.expiry).to_i
-    end
-
-    def token_issued_at
-      Time.now
-    end
-  end
-end
-=end
