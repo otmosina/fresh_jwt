@@ -10,5 +10,8 @@ gem 'jwt'
 gem 'dry-initializer'
 gem 'dry-validation'
 gem 'dry-monads'
+gem 'rspec'
+# https://github.com/garyf/jwt_claims
+# gem 'jwt_claims'
 
 gem 'pry'

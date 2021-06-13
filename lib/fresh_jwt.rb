@@ -8,6 +8,7 @@ require_relative 'validator'
 require_relative 'fresh_jwt/expiration'
 require_relative 'contracts/issuer_contract'
 require_relative 'fresh_jwt/payload'
+require_relative 'fresh_jwt/version'
 
 
 require 'dry/monads'

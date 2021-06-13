@@ -24,3 +24,18 @@ module FreshJwt
     end
   end
 end
+
+=begin
+def registered_claim(sym)
+  case sym
+  when :aud then Claim::Aud
+  when :exp then Claim::Exp
+  when :iat then Claim::Iat
+  when :iss then Claim::Iss
+  when :jti then Claim::Jti
+  when :nbf then Claim::Nbf
+  when :sub then Claim::Sub
+  else nil # custom claim
+  end
+end
+=end
