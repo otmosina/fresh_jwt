@@ -9,5 +9,6 @@ ruby "2.7.3"
 gem 'jwt'
 gem 'dry-initializer'
 gem 'dry-validation'
+gem 'dry-monads'
 
 gem 'pry'

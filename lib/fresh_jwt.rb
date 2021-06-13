@@ -4,6 +4,12 @@ require 'dry/validation'
 require 'jwt'
 require 'securerandom' 
 
+require_relative 'validator'
+require_relative 'fresh_jwt/expiration'
+require_relative 'contracts/issuer_contract'
+
+
+require 'dry/monads'
 #TODO payload as dry entity
 module Entity
   module Callable
@@ -28,32 +34,28 @@ module FreshJwt
     option :user_id, proc(&:to_i), optional: true
   end
     
-
-
-
-  class IssuerContract < Dry::Validation::Contract
-    params do
-      required(:algorithm).filled(:string)
-    end
-  end
   class Issuer
     extend Dry::Initializer
 
     option :payload, default: -> { Hash.new }
     option :algorithm, default: -> { 'HS256' } #RS256
+    option :secret, default: -> { SecureRandom.hex }
 
     def call
-      contract = IssuerContract.new
-      # TODO: monadic handle contract
-      result = contract.call(algorithm: algorithm)
+
+      result = IssuerContract.new.call(algorithm: algorithm)
+      if result.success?
+        puts "all good"
+      else
+        p result.errors.to_h
+        raise ContractError  
+      end
       # TODO: monadic handle contract
       
-      secret = 'secret'
-
       #(JWT ID) 
       jti = SecureRandom.hex
       iat = Time.now.to_i
-      exp = iat + 10 * 60 
+      exp = iat + Expiration::ACCESS 
       user_id = rand(666)
       payload = {
         jti: jti,
@@ -66,15 +68,20 @@ module FreshJwt
     end
   end
 end
-
-token = FreshJwt::Issuer.new(algorithm: "HS256").call
+issuer = FreshJwt::Issuer.new(algorithm: 'HS256') 
+token = begin
+  issuer.call
+rescue FreshJwt::ContractError => e
+  p e.message
+  nil
+end
+exit(0) unless token
 p token 
-p JWT.decode(token[1], 'secret', 'HS256')
+p JWT.decode(token[1], issuer.secret, 'HS256')
 
 payload = FreshJwt::Payload.new({})
 
-require 'pry'
-binding.pry
+
 
 =begin
 
