@@ -2,7 +2,7 @@ require 'dry/monads'
 #это штука типа оборачивает монады...
 require 'dry/monads/do'
 module FreshJwt
-  class Validator
+  class ContractValidator
     include Dry::Monads[:result]
     include Dry::Monads::Do.for(:call)
   

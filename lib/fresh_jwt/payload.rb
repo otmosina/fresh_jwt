@@ -3,23 +3,23 @@
 
 module FreshJwt
 
-  #module Entity
-  #  module Callable
-  #    def call(*args)
-  #      new(*args)
-  #    end
-  #
-  #    alias [] call
-  #  end
-  #end
+  module Entity
+    module Callable
+      def call(*args)
+        new(*args)
+      end
+  
+      alias [] call
+    end
+  end
 
   class Payload
     extend Dry::Initializer
-   # extend Entity::Callable
+    extend Entity::Callable
   
     option :jti, default: proc { SecureRandom.hex }
     option :iat, proc(&:to_i), default: proc { Time.now }
-    option :exp, proc(&:to_i), default: -> { iat + 10*60 } #default: ->(val) { iat + 10*60 }
+    option :exp, proc(&:to_i), default: -> { iat + 10 * 60 } #default: ->(val) { iat + 10*60 }
     option :extend, proc(&:to_h), default: proc{ {} }
     
     def default_payload
