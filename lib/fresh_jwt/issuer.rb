@@ -19,7 +19,7 @@ module FreshJwt
       token = JWT.encode(payload.to_hash, secret, algorithm)
       access_token = Entity::AccessToken.new(token: token)
       refresh_token = Entity::RefreshToken.new(token: token)
-      tokens_repo.transaction do
+      result = tokens_repo.transaction do
         tokens_repo.save access_token
         tokens_repo.save refresh_token
       end

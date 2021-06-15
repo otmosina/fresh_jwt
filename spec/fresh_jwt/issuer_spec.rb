@@ -21,6 +21,15 @@ RSpec.describe FreshJwt::Issuer do
   end    
   it 'match jwt_regexp' do
     expect(issuer.call.first.token).to match jwt_regexp
-  end  
+  end 
+  
+  context 'store transaction is failed' do
+    before do
+      allow(FreshJwt::Store).to receive(:save).and_raise(StandardError)
+    end
+    it 'return empty array' do
+      expect(issuer.call).to eq([])
+    end
+  end
 
 end
