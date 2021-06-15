@@ -17,6 +17,6 @@ exit(0) unless token
 p token 
 p "decoded " << FreshJwt::Decoder.new().decode(token:token).to_s 
 #p JWT.decode(token, issuer.secret, 'HS256')
-p "valid? " << FreshJwt::Validator.new().validate(token).to_s
+p "valid? " << FreshJwt::Validator.new().call(token).to_s
 payload = FreshJwt::Payload.new({})
 p "store: #{FreshJwt::Store.all}"
