@@ -11,10 +11,16 @@ RSpec.describe FreshJwt::Issuer do
     allow(SecureRandom).to receive(:hex).and_return(plain_token)
   end
   it 'should be kind of string' do
-    expect(issuer.call).to be_kind_of String
+    expect(issuer.call).to be_kind_of Array
   end
+  it 'return AccessToken as first value' do
+    expect(issuer.call.first).to be_kind_of FreshJwt::Entity::AccessToken
+  end
+  it 'return RefreshToken as first value' do
+    expect(issuer.call.last).to be_kind_of FreshJwt::Entity::RefreshToken
+  end    
   it 'match jwt_regexp' do
-    expect(issuer.call).to match jwt_regexp
+    expect(issuer.call.first.token).to match jwt_regexp
   end  
 
 end

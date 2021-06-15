@@ -6,12 +6,13 @@ payload = FreshJwt::Payload.new(extend:{
 }) 
 issuer = FreshJwt::Issuer.new(algorithm: 'HS256', payload:payload)
 
-token = begin
+access_token, refresh_token = begin
   issuer.call
 rescue FreshJwt::ContractError => e
   p e.message
   nil
 end
+token = access_token.token
 
 exit(0) unless token
 p token 

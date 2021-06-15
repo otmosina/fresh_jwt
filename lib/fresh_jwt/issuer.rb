@@ -12,16 +12,25 @@ module FreshJwt
     option :refresh_token, proc(&:to_s), default: -> { SecureRandom.hex }
     option :tokens_repo, default: -> { Store }
 
+
+
     def call
       validate_params params
       token = JWT.encode(payload.to_hash, secret, algorithm)
-      tokens_repo.save Entity::AccessToken.new(
-        token: token
-      )
-      tokens_repo.save Entity::RefreshToken.new(
-        token: refresh_token
-      )
-      return token
+      access_token = Entity::AccessToken.new(token: token)
+      refresh_token = Entity::RefreshToken.new(token: token)
+      tokens_repo.transaction do
+        tokens_repo.save access_token
+        tokens_repo.save refresh_token
+      end
+
+      #tokens_repo.save Entity::AccessToken.new(
+      #  token: token
+      #)
+      #tokens_repo.save Entity::RefreshToken.new(
+      #  token: refresh_token
+      #)
+      return access_token, refresh_token
     end
 
     def params

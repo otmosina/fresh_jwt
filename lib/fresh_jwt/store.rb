@@ -10,5 +10,9 @@ module FreshJwt
     def self.all
       @@store
     end
+
+    def self.transaction &block
+      block.call
+    end
   end
 end
