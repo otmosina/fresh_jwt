@@ -23,6 +23,7 @@ module FreshJwt
         tokens_repo.save access_token
         tokens_repo.save refresh_token
       end
+      return result unless result.success?
 
       #tokens_repo.save Entity::AccessToken.new(
       #  token: token

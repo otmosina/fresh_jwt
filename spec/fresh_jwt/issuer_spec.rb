@@ -1,6 +1,8 @@
+#require 'dry/monads/result'
 
-
+include Dry::Monads[:result]
 RSpec.describe FreshJwt::Issuer do
+  
   let(:jwt_regexp) { /^[\w-]*\.[\w-]*\.[\w-]*$/ }
   let(:plain_token) { 'Token' }
   let(:secret) { SecureRandom.hex }
@@ -28,7 +30,8 @@ RSpec.describe FreshJwt::Issuer do
       allow(FreshJwt::Store).to receive(:save).and_raise(StandardError)
     end
     it 'return empty array' do
-      expect(issuer.call).to eq([])
+      #expect(issuer.call).to eq([])
+      expect(issuer.call).to be_kind_of(Failure)
     end
   end
 
