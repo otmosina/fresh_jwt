@@ -13,6 +13,8 @@ module FreshJwt
     end
 
     class RefreshToken < Token
+      #https://auth0.com/docs/tokens/refresh-tokens/disable-refresh-token-rotation
+      option :behavior_type, proc(&:to_s), default: -> {'non-rotation'} #or rotation
     end
 
 

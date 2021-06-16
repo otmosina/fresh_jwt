@@ -2,6 +2,7 @@ module FreshJwt
 
   class Issuer
     extend Dry::Initializer
+    #include Dry::Monads[:result, :do]
     REFRESH_EXPIRATION = 60*60*24
 
 
