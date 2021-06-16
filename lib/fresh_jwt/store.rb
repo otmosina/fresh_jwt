@@ -6,7 +6,7 @@ module FreshJwt
       @@store << token
     end
     def self.get token
-      @@store.find{ |t| tt == token }
+      @@store.find{ |t| t == token }
     end
     def self.all
       @@store
