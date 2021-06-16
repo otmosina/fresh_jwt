@@ -2,6 +2,14 @@ module FreshJwt
   class Store
     extend Dry::Monads[:result]
     @@store = []
+    #{
+    #  "token_value": {
+    #    jti: 1,
+    #    exp: 2,
+    #    type: :access
+    #  }
+    #}
+
     def self.save token
       @@store << token
     end
@@ -15,6 +23,7 @@ module FreshJwt
     def self.transaction &block
       begin
         block.call
+        return Success()
       rescue Exception => error
 
         puts error
