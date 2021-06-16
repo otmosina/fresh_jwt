@@ -2,7 +2,7 @@ module FreshJwt
 
   class Issuer
     extend Dry::Initializer
-    #include Dry::Monads[:result, :do]
+    include Dry::Monads[:result, :do]
     REFRESH_EXPIRATION = 60*60*24
 
 
@@ -20,11 +20,15 @@ module FreshJwt
       token = JWT.encode(payload.to_hash, secret, algorithm)
       access_token = Entity::AccessToken.new(token: token)
       refresh_token = Entity::RefreshToken.new(token: token)
-      result = tokens_repo.transaction do
-        tokens_repo.save access_token
-        tokens_repo.save refresh_token
-      end
-      return result unless result.success?
+      
+      yield tokens_repo.single_transaction access_token
+      yield tokens_repo.single_transaction refresh_token
+      
+      #result = tokens_repo.transaction do
+      #  tokens_repo.save access_token
+      #  tokens_repo.save refresh_token
+      #end
+      #return result unless result.success?
 
       #tokens_repo.save Entity::AccessToken.new(
       #  token: token

@@ -11,6 +11,7 @@ module FreshJwt
     #}
 
     def self.save token
+      
       @@store << token
     end
     def self.get token
@@ -18,6 +19,16 @@ module FreshJwt
     end
     def self.all
       @@store
+    end
+
+    def self.single_transaction token
+      begin
+        save token
+        return Success()
+      rescue Exception => error
+        puts error
+        return Failure(error: error.message)
+      end      
     end
 
     def self.transaction &block
