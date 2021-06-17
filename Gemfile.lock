@@ -60,6 +60,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.2)
+    timecop (0.9.4)
 
 PLATFORMS
   x86_64-darwin-20
@@ -71,6 +72,7 @@ DEPENDENCIES
   jwt
   pry
   rspec
+  timecop
 
 RUBY VERSION
    ruby 2.7.3p183

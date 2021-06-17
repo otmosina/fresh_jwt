@@ -12,7 +12,7 @@ module FreshJwt
 
     def call(token)
       access_token = token_repo.find_by_token(token)
-      if payload["exp"] > Time.now.to_i
+      if access_token.expired_at > Time.now.to_i
         true
       else
         false
