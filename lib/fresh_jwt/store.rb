@@ -21,6 +21,10 @@ module FreshJwt
       @@store
     end
 
+    def self.find_by_token token
+      @@store.find{ |t| t.token == token }
+    end
+
     def self.single_transaction token
       begin
         save token
