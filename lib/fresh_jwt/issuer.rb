@@ -5,8 +5,8 @@ module FreshJwt
     include Dry::Monads[:result, :do]
     REFRESH_EXPIRATION = 60*60*24
 
-
-    option :payload, default: proc { Payload.new } #why we need new i do not understand, coz class is callable
+    #Payload.new(extend: val )
+    option :payload, ->(hash){ Payload.new(extend: hash) }, default: -> { Payload.new } #why we need new i do not understand, coz class is callable
     # TODO: describe enum type for 2 algo
     option :algorithm, default: -> { 'HS256' } #RS256 
     option :secret, default: -> { 'SECRET' }

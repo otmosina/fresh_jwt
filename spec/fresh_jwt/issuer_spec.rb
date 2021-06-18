@@ -7,7 +7,7 @@ RSpec.describe FreshJwt::Issuer do
   let(:plain_token) { 'Token' }
   let(:secret) { SecureRandom.hex }
   let(:user_id) { rand(1000) }
-  let(:payload) { FreshJwt::Payload.new(extend:{user_id:user_id})}
+  let(:payload) { {user_id:user_id} }
   let(:issuer) { described_class.new(payload: payload) }
   before do
     allow(SecureRandom).to receive(:hex).and_return(plain_token)
