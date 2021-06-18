@@ -19,7 +19,7 @@ module FreshJwt
   
     option :jti, default: proc { SecureRandom.hex }
     option :iat, proc(&:to_i), default: proc { Time.now }
-    option :exp, proc(&:to_i), default: -> { iat + 10 * 60 } #default: ->(val) { iat + 10*60 }
+    option :exp, ->(val){ (Time.now + val).to_i }, default: -> { 10 * 60 } #default: ->(val) { iat + 10*60 }
     option :extend, proc(&:to_h), default: proc{ {} }
     
     def default_payload
@@ -29,6 +29,7 @@ module FreshJwt
     def to_hash
       @params ||= default_payload.merge(extend)
     end
+
   end
 end
 

@@ -6,7 +6,7 @@ module FreshJwt
     REFRESH_EXPIRATION = 60*60*24
 
     #Payload.new(extend: val )
-    option :payload, ->(hash){ Payload.new(extend: hash) }, default: -> { Payload.new } #why we need new i do not understand, coz class is callable
+    option :payload, ->(hash){ Payload.new(exp: FreshJwt::Expiration::ACCESS, extend: hash) }, default: -> { Payload.new } #why we need new i do not understand, coz class is callable
     # TODO: describe enum type for 2 algo
     option :algorithm, default: -> { 'HS256' } #RS256 
     option :secret, default: -> { 'SECRET' }
@@ -19,7 +19,7 @@ module FreshJwt
       validate_params params
       token = JWT.encode(payload.to_hash, secret, algorithm)
       access_token = Entity::AccessToken.new(token: token)
-      refresh_token = Entity::RefreshToken.new(token: token)
+      refresh_token = Entity::RefreshToken.new(token: refresh_token)
       
       yield tokens_repo.single_transaction access_token
       yield tokens_repo.single_transaction refresh_token
