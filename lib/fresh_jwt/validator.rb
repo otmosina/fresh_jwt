@@ -39,7 +39,7 @@ module FreshJwt
       if payload["exp"] > Time.now.to_i
         Success()
       else
-        Failure(valid_payload: true)
+        Failure(valid_payload: false)
       end      
     end
 
