@@ -8,6 +8,6 @@ Gem::Specification.new do |s|
   s.email = 'otmosina@gmail.com'
   s.files = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.test_files = s.files.grep(/^spec/)
-  s.homepage = 'https://rubygems.org/gems/hola'
+  s.homepage = 'https://rubygems.org/gems/fresh_jwt'
   s.license = 'MIT'
 end
