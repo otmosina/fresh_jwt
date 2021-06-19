@@ -13,8 +13,6 @@ module FreshJwt
     option :refresh_token, proc(&:to_s), default: -> { SecureRandom.hex }
     option :tokens_repo, default: -> { Store }
 
-
-
     def call
       validate_params params
       token = JWT.encode(payload.to_hash, secret, algorithm)

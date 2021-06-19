@@ -30,7 +30,7 @@ module FreshJwt
         save token
         return Success()
       rescue Exception => error
-        puts error
+        #puts error
         return Failure(error: error.message)
       end      
     end

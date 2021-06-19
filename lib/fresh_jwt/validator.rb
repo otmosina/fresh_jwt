@@ -1,8 +1,5 @@
 module FreshJwt
   class Validator
-    # должен ли валидатор декодить токен
-    # или он всего ли проверяет есть ли он в базе и какой у него по базе срок жизни
-    # а вот аутентификатор уже должен пробовать раскодировать токен, проверить срок жизни по пейлооаду и взять данные из полезной нагрузки
     extend Dry::Initializer
     include Dry::Monads[:result, :do]
 
@@ -31,7 +28,7 @@ module FreshJwt
         result = JWT.decode(token, secret, true, {algorithm: algorithm})
         Success(result)
       rescue JWT::VerificationError, JWT::DecodeError => e
-        Failure(decode_error: e.message)
+        Failure(decode_error: ["Cannot validate", e.message])
       end
     end
 
@@ -42,16 +39,5 @@ module FreshJwt
         Failure(valid_payload: false)
       end      
     end
-
-
-    def auth(token)
-      payload, alg = JWT.decode(token, secret, algorithm)
-      #access_token = Store.find_by_token(token)
-      if payload["exp"] > Time.now.to_i
-        true
-      else
-        false
-      end
-    end    
   end
 end
