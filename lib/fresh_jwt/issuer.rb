@@ -11,7 +11,7 @@ module FreshJwt
     option :algorithm, default: -> { 'HS256' } #RS256 
     option :secret, default: -> { 'SECRET' }
     option :refresh_token, proc(&:to_s), default: -> { SecureRandom.hex }
-    option :tokens_repo, default: -> { StoreOld }
+    option :tokens_repo, ->(instance){ Store::Decorator.new(instance)}, default: -> { Memory.new }
 
     def call
       validate_params params
@@ -24,10 +24,10 @@ module FreshJwt
       #  tokens_repo.save refresh_toke
       #end
       
-
       yield tokens_repo.single_transaction access_token
       yield tokens_repo.single_transaction refresh_token
       
+
       #result = tokens_repo.transaction do
       #  tokens_repo.save access_token
       #  tokens_repo.save refresh_token
