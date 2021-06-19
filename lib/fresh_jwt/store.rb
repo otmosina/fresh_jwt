@@ -11,23 +11,46 @@ module FreshJwt
       end      
     end
   end
-  class Memory
-    include StoreMixin
+  require 'delegate'
+  class DecorateStore < SimpleDelegator
+
+    include Dry::Monads[:result]
     class TokenObjectError < StandardError
       DEFAULT_MESSAGE = 'Token object has wrong structure for Tokens store'
       def initialize(msg = DEFAULT_MESSAGE, exception_type='token')
         @exception_type = exception_type
         super(msg)
       end
+    end    
+
+    def single_transaction token
+      begin
+        self.save token
+        return Success()
+      rescue Exception => error
+        #puts error
+        return Failure(error: error.message)
+      end      
+    end 
+    def save token_object
+      unless token_object.respond_to?('token')
+        raise TokenObjectError
+      end 
+      super(token_object)
     end
+  end
+  #DecorateStore.new(Store.new)
+  class Memory
+    #include StoreMixin
+
     def initialize
       @store = {}
     end
 
     def save token_object
-      unless token_object.respond_to?('token')
-        raise TokenObjectError
-      end 
+      #unless token_object.respond_to?('token')
+      #  raise TokenObjectError
+      #end 
       @store[token_object.token] = token_object
       return true
     end
@@ -85,14 +108,3 @@ module FreshJwt
     
   end
 end
-
-# Example of transaction implementation
-# TODO: check implementation on ActiveRecord
-
-#def start(shopper, shipment)
-#  repo.transaction do
-#    assembly = yield start_assembly(shopper, shipment)
-#    confirm_assignments(shopper, shipment)
-#    Success(assembly)
-#  end
-#end
