@@ -2,12 +2,12 @@ Struct.new('TokenObject', :token, :expiration)
 include Dry::Monads[:result]
 
 RSpec.describe FreshJwt::Memory do
-  let(:memory_store) { FreshJwt::DecorateStore.new(FreshJwt::Memory.new) }
+  let(:memory_store) { FreshJwt::Store::Decorator.new(FreshJwt::Memory.new) }
   let(:wrong_token_object) { SecureRandom.hex }
   let(:correct_token_object) { Struct::TokenObject.new }
 
   it 'return error when token object incorrect' do
-    expect{memory_store.save(wrong_token_object)}.to raise_error(FreshJwt::DecorateStore::TokenObjectError)
+    expect{memory_store.save(wrong_token_object)}.to raise_error(FreshJwt::Store::Decorator::TokenObjectError)
   end
 
   it 'return true coz token struct is ok' do
@@ -30,7 +30,7 @@ RSpec.describe FreshJwt::Memory do
 
   describe 'single_transaction mixin' do
     before do
-      memory_store.class.send(:include, FreshJwt::StoreMixin)    
+      memory_store.class.send(:include, FreshJwt::Store::Mixin)    
     end
     it 'returns Success monad' do      
       expect(memory_store.single_transaction(correct_token_object)).to be_kind_of(Success)
@@ -45,7 +45,7 @@ RSpec.describe FreshJwt::Memory do
   #it_behaves_like 'single_transaction mixin'
 
   describe 'use delegator for Decorate Store' do
-    let(:memory_store_decorated) {FreshJwt::DecorateStore.new(memory_store)}
+    let(:memory_store_decorated) {FreshJwt::Store::Decorator.new(memory_store)}
     it 'returns Success monad' do
       expect(memory_store_decorated.single_transaction(correct_token_object)).to be_kind_of(Success)
     end

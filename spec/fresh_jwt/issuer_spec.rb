@@ -27,7 +27,7 @@ RSpec.describe FreshJwt::Issuer do
   #let(:store) { class_double(FreshJwt::Store)}
   context 'store transaction is failed' do
     before do
-      allow(FreshJwt::Store).to receive(:save).and_raise(StandardError)
+      allow(FreshJwt::StoreOld).to receive(:save).and_raise(StandardError)
     end
     it 'return empty array' do
       expect(issuer.call).to be_kind_of(Failure)

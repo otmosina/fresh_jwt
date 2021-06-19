@@ -5,7 +5,7 @@ module FreshJwt
 
     option :algorithm, default: -> { 'HS256' }
     option :secret, default: -> { 'SECRET' }
-    option :token_repo, default: -> { Store }
+    option :token_repo, default: -> { StoreOld }
 
     def call(token)
       yield valid_by_store? token

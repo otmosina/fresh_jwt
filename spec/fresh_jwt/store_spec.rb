@@ -1,6 +1,6 @@
 Struct.new('AccessToken', :token)
 
-RSpec.describe FreshJwt::Store do
+RSpec.describe FreshJwt::StoreOld do
   let(:token) { SecureRandom.hex }
   let(:unknown_token) { SecureRandom.hex }
   let(:token_obj) { Struct::AccessToken.new(token) }
