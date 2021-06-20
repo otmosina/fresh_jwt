@@ -16,6 +16,10 @@
 
 require_relative '../lib/fresh_jwt'
 require 'timecop'
+
+require 'simplecov'
+SimpleCov.start
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

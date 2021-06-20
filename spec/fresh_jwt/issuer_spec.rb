@@ -12,6 +12,10 @@ RSpec.describe FreshJwt::Issuer do
   before do
     allow(SecureRandom).to receive(:hex).and_return(plain_token)
   end
+  it 'SecureRandom always return same value' do
+    expect(SecureRandom).to receive(:hex).and_return(plain_token)
+    issuer.call
+  end
   it 'should be kind of string' do
     expect(issuer.call).to be_kind_of Array
   end
