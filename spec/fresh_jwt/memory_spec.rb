@@ -1,8 +1,8 @@
 Struct.new('TokenObject', :token, :expiration)
 include Dry::Monads[:result]
 
-RSpec.describe FreshJwt::Memory do
-  let(:memory_store) { FreshJwt::Store::Decorator.new(FreshJwt::Memory.new) }
+RSpec.describe FreshJwt::Store::Memory do
+  let(:memory_store) { FreshJwt::Store::Decorator.new(FreshJwt::Store::Memory.new) }
   let(:wrong_token_object) { SecureRandom.hex }
   let(:correct_token_object) { Struct::TokenObject.new }
 

@@ -11,7 +11,12 @@ module FreshJwt
     option :algorithm, default: -> { 'HS256' } #RS256 
     option :secret, default: -> { 'SECRET' }
     option :refresh_token, proc(&:to_s), default: -> { SecureRandom.hex }
-    option :tokens_repo, ->(instance){ Store::Decorator.new(instance)}, default: -> { Memory.new }
+    option :tokens_repo, ->(instance){ Store::Decorator.new(instance)}, default: -> { Store::Memory.new }
+
+    #def initialize args, &block
+
+    #  super(args)
+    #end
 
     def call
       validate_params params
