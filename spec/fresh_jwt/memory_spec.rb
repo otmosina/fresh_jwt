@@ -4,7 +4,7 @@ include Dry::Monads[:result]
 RSpec.describe FreshJwt::Store::Memory do
   let(:memory_store) { FreshJwt::Store::Decorator.new(FreshJwt::Store::Memory.new) }
   let(:wrong_token_object) { SecureRandom.hex }
-  let(:correct_token_object) { Struct::TokenObject.new }
+  let(:correct_token_object) { Struct::TokenObject.new('token') }
 
   it 'return error when token object incorrect' do
     expect{memory_store.save(wrong_token_object)}.to raise_error(FreshJwt::Store::Decorator::TokenObjectError)
@@ -20,14 +20,15 @@ RSpec.describe FreshJwt::Store::Memory do
     end
 
     it 'return correct token object' do
-      expect(memory_store.find_by_token(correct_token_object.token)).to eq(correct_token_object)
+      expect(memory_store.find_by_token(correct_token_object.token)).to be_success
     end
 
     it 'return nil coz token didnt save before' do
-        expect(memory_store.find_by_token('token')).to be_nil
+        expect(memory_store.find_by_token(SecureRandom.hex)).to be_failure
     end
   end
 
+  # TODO: remove it coz mixin do not use anymore
   describe 'single_transaction mixin' do
     before do
       memory_store.class.send(:include, FreshJwt::Store::Mixin)    
@@ -38,7 +39,7 @@ RSpec.describe FreshJwt::Store::Memory do
 
     it 'can find token after save via single transaction' do
       memory_store.single_transaction(correct_token_object)
-      expect(memory_store.find_by_token(correct_token_object.token)).to eq(correct_token_object)
+      expect(memory_store.find_by_token(correct_token_object.token).value!).to eq(correct_token_object.token)
     end
   end
 
@@ -52,7 +53,7 @@ RSpec.describe FreshJwt::Store::Memory do
   
     it 'can find token after save via single transaction' do
       memory_store_decorated.single_transaction(correct_token_object)
-      expect(memory_store_decorated.find_by_token(correct_token_object.token)).to eq(correct_token_object)
+      expect(memory_store_decorated.find_by_token(correct_token_object.token).value!).to eq(correct_token_object.token)
     end    
   end
 end

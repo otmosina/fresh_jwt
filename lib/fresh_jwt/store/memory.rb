@@ -11,6 +11,9 @@ module FreshJwt
       end
   
       def find_by_token token
+        if token == 'unknown_token'
+        #require 'pry'; binding.pry 
+        end
         @store[token]
       end
     end 

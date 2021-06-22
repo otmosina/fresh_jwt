@@ -14,6 +14,7 @@ require_relative 'fresh_jwt/validator'
 require_relative 'fresh_jwt/entity/access_token'
 require_relative 'fresh_jwt/issuer'
 require_relative 'fresh_jwt/store_old'
+require_relative 'fresh_jwt/refresher'
 
 
 # require 'dry/monads'

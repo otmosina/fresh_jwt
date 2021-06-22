@@ -9,7 +9,9 @@ module FreshJwt
     #require 'singleton'
     @@repo = nil
     def self.repo= repo
+      # TODO add check repo needed methods
       @@repo = Store::Decorator.new(repo)
+      
     end
 
     def self.repo
