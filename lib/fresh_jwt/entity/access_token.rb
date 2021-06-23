@@ -7,6 +7,9 @@ module FreshJwt
       option :token, proc(&:to_s)
       option :issued_at, proc(&:to_i), default: -> { Time.now.to_i }
       
+      def expired?
+        Time.now.to_i > self.expired_at
+      end
     end
 
     class AccessToken < Token
