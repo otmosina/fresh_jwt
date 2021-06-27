@@ -5,13 +5,6 @@ module FreshJwt
     class Decorator < SimpleDelegator
     
       include Dry::Monads[:result]
-      class TokenObjectError < StandardError
-        DEFAULT_MESSAGE = 'Token object has wrong structure for Tokens store'
-        def initialize(msg = DEFAULT_MESSAGE, exception_type='token')
-          @exception_type = exception_type
-          super(msg)
-        end
-      end
     
       def single_transaction token, type=:access
         token_object = if type.to_sym == :access

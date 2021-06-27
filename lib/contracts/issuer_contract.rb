@@ -1,16 +1,6 @@
-module FreshJwt
-  class ContractError < StandardError
-    DEFAULT_MESSAGE = 'something wrong with Contract'
-    def initialize(msg = DEFAULT_MESSAGE, exception_type='custom')
-      @exception_type = exception_type
-      super(msg) 
-    end
-    def message
-      super
-    end
-  end
-end
+# frozen_string_literal: true
 
+#TODO: outside of module
 class IssuerContract < Dry::Validation::Contract
   params do
     required(:algorithm).filled(:string)

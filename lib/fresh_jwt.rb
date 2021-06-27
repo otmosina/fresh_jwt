@@ -15,13 +15,14 @@ require_relative 'fresh_jwt/entity/access_token'
 require_relative 'fresh_jwt/issuer'
 require_relative 'fresh_jwt/store_old'
 require_relative 'fresh_jwt/refresher'
+require_relative 'fresh_jwt/errors'
 
 
 # require 'dry/monads'
 # TODO payload as dry entity
 
 
-module FreshJwt  
+module FreshJwt
 
 
   class Decoder
@@ -34,6 +35,4 @@ module FreshJwt
       JWT.decode(token, secret, algorithm)
     end
   end
-
-
 end

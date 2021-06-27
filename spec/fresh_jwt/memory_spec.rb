@@ -7,7 +7,7 @@ RSpec.describe FreshJwt::Store::Memory do
   let(:correct_token_object) { Struct::TokenObject.new('token') }
 
   it 'return error when token object incorrect' do
-    expect{memory_store.save(wrong_token_object)}.to raise_error(FreshJwt::Store::Decorator::TokenObjectError)
+    expect{memory_store.save(wrong_token_object)}.to raise_error(FreshJwt::TokenObjectError)
   end
 
   it 'return true coz token struct is ok' do

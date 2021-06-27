@@ -43,7 +43,7 @@ RSpec.describe FreshJwt::Refresher do
     end
 
     it 'should return concrete error coz token has expire' do
-      expect(subject.failure).to eq(error: described_class::TokenExpiredError.new)
+      expect(subject.failure).to eq(error: FreshJwt::TokenExpiredError.new)
     end
 
 

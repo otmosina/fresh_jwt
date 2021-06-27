@@ -2,7 +2,7 @@
 
 module FreshJwt
   class Refresher
-    class TokenExpiredError < StandardError; end
+    
     extend Dry::Initializer
     include Dry::Monads[:result, :do]
     option :repo, default: -> { Store.repo }
