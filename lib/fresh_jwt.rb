@@ -16,6 +16,8 @@ require_relative 'fresh_jwt/issuer'
 require_relative 'fresh_jwt/store_old'
 require_relative 'fresh_jwt/refresher'
 require_relative 'fresh_jwt/errors'
+require_relative 'fresh_jwt/configure'
+
 
 
 # require 'dry/monads'
@@ -23,7 +25,7 @@ require_relative 'fresh_jwt/errors'
 
 
 module FreshJwt
-
+  extend Configure
 
   class Decoder
     extend Dry::Initializer
