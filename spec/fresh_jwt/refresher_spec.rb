@@ -7,21 +7,24 @@ RSpec.describe FreshJwt::Refresher do
   let(:token) { SecureRandom.uuid }
 
   let(:repo) { FreshJwt::Store::Memory.new }
+  #subject(:refresher) { }
   before do
     FreshJwt::Store.repo = repo
     FreshJwt::Store.repo.single_transaction token
   end
-  it 'have not found a token' do
-    expect(described_class.new.call(unknown_token)).to be_failure
-  end
+
 
   context 'when add token to store' do
-    #before do
-      
-    #end
     it 'retuns success with token' do
       expect(described_class.new.call(token)).to be_success
     end
+
+    #TODO: add shared example for checking new issued access & refresh tokens pair
+    it 'retuns access & refresh tokens pair' do
+      expect(described_class.new.call(token).value!.size).to eq(2)
+    end    
+
+
   end
 
   context 'when invalid by differents reason' do
@@ -30,6 +33,11 @@ RSpec.describe FreshJwt::Refresher do
       t = Time.at( Time.now.to_i + FreshJwt::Expiration::ACCESS + 1 )
       Timecop.travel(t)    
     end
+    
+    it 'have not found a token' do
+      expect(described_class.new.call(unknown_token)).to be_failure
+    end
+
     it 'should return failure object coz token has expire' do
       expect(subject).to be_failure
     end
@@ -37,6 +45,8 @@ RSpec.describe FreshJwt::Refresher do
     it 'should return concrete error coz token has expire' do
       expect(subject.failure).to eq(error: described_class::TokenExpiredError.new)
     end
+
+
     
   end
 

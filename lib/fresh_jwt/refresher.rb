@@ -9,11 +9,11 @@ module FreshJwt
 
     def call(refresh_token)
       token_object = yield repo.find_by_token refresh_token
-      
       yield expiration_validate token_object
+      access_token, refresh_token = Issuer.new.call()
 
       
-      Success(token_object)
+      Success([access_token, refresh_token])
       #if token_object
       #  Success(token_object)
       #else
