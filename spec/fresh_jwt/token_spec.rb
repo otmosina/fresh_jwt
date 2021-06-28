@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe FreshJwt::Entity::AccessToken do
-    let(:token) { SecureRandom.hex }
-    let(:access_token) { FreshJwt::Entity::AccessToken.new(token: token) }
-    let(:refresh_token) { FreshJwt::Entity::RefreshToken.new(token: token) }
-    
-    before do
-      
-    end
+    let(:token_value) { SecureRandom.hex }
+    let(:access_token) { FreshJwt::Entity::AccessToken.new(token: token_value) }
+    let(:refresh_token) { FreshJwt::Entity::RefreshToken.new(token: token_value) }
     it 'create access token klass' do
       expect(access_token.name).to eq('AccessToken')
+    end
+    context 'check access token' do
+      let(:type) { :access }
+      let(:token) { access_token }
+      it_behaves_like FreshJwt::Entity::Token
     end
 
     it 'return false coz access not expire' do

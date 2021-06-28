@@ -39,4 +39,16 @@ RSpec.describe FreshJwt::Issuer do
     end
   end
 
+  context 'check correct access token objects' do
+    let(:type) { :access }
+    let(:token) { issuer.call.first }
+    it_behaves_like FreshJwt::Entity::Token
+  end
+
+  context 'check correct refresh token objects' do
+    let(:type) { :refresh }
+    let(:token) { issuer.call.last }
+    it_behaves_like FreshJwt::Entity::Token
+  end  
+
 end
