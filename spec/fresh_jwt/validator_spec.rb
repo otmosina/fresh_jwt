@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-include Dry::Monads[:result]
+
 RSpec.describe FreshJwt::Validator do
   #let(:token) { SecureRandom.hex }
   #let(:access_token) { FreshJwt::Entity::AccessToken.new(token: token) }
@@ -13,7 +13,7 @@ RSpec.describe FreshJwt::Validator do
   end
 
   it 'con not validate coz unknwon token' do
-    expect(described_class.new.call(random_token)).to be_kind_of(Failure)
+    expect(described_class.new.call(random_token)).to be_failure
   end
   context 'too late for validate' do
     before do

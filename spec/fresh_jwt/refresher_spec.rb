@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 # кажется причина ошибок в спеках в том, что Memory obj шарится в разных местах
 # нужно видимо делать instance_double()
-include Dry::Monads[:result]
 RSpec.describe FreshJwt::Refresher do
   let(:unknown_token) { 'unknown_token' }
   let(:token) { SecureRandom.uuid }

@@ -1,5 +1,4 @@
 Struct.new('TokenObject', :token, :expiration)
-include Dry::Monads[:result]
 
 RSpec.describe FreshJwt::Store::Memory do
   let(:memory_store) { FreshJwt::Store::Decorator.new(FreshJwt::Store::Memory.new) }
@@ -51,7 +50,7 @@ RSpec.describe FreshJwt::Store::Memory do
     let(:memory_store_decorated) { FreshJwt::Store::Decorator.new(FreshJwt::Store::Memory.new) }
 
     it 'returns Success monad' do
-      expect(memory_store_decorated.single_transaction(correct_token_object.token)).to be_kind_of(Success)
+      expect(memory_store_decorated.single_transaction(correct_token_object.token)).to be_success
     end
   
     it 'can find token after save via single transaction' do

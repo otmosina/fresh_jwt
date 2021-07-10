@@ -18,12 +18,14 @@ require 'fresh_jwt'
 require 'timecop'
 
 require 'simplecov'
+require 'dry/monads/result'
 SimpleCov.start
 
 # TODO: maybe load shared only in specs that really needed
 Dir["./support/**/*.rb"].sort.each { |f| require f }
 
 RSpec.configure do |config|
+  config.include Dry::Monads::Result::Mixin
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
